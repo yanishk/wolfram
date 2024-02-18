@@ -1,6 +1,6 @@
 {-
 -- EPITECH PROJECT, 2024
--- wolfram
+-- B-FUN-400-PAR-4-1-wolfram-yanis.harkouk
 -- File description:
 -- Main
 -}

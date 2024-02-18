@@ -2,7 +2,7 @@
 -- EPITECH PROJECT, 2024
 -- B-FUN-400-PAR-4-1-wolfram-yanis.harkouk
 -- File description:
--- setConf
+-- PrintRules
 -}
 
 module PrintRules
