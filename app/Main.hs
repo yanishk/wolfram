@@ -129,6 +129,7 @@ getOpts dConf _
     | (move dConf) == Nothing = Nothing
     | (dispLines dConf) /= Nothing && (dispLines dConf) < (Just 0) = Nothing
 getOpts dConf [] = Just dConf
+getOpts _ _ = Nothing
 
 checkConf :: Maybe Conf -> IO (Maybe Int)
 checkConf Nothing = exitWith (ExitFailure 84)
