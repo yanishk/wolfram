@@ -1,3 +1,10 @@
+{-
+-- EPITECH PROJECT, 2024
+-- wolfram
+-- File description:
+-- Main
+-}
+
 module Main (main) where
 
 import System.Environment(getArgs)

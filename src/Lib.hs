@@ -1,3 +1,10 @@
+{-
+-- EPITECH PROJECT, 2024
+-- wolfram
+-- File description:
+-- Lib
+-}
+
 module Lib
     ( someFunc
     ) where
