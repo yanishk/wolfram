@@ -24,8 +24,6 @@ source-repository head
   location: https://github.com/githubuser/wolfram
 
 library
-  exposed-modules:
-      Lib
   other-modules:
       Paths_wolfram
   autogen-modules:
@@ -40,6 +38,8 @@ library
 executable wolfram-exe
   main-is: Main.hs
   other-modules:
+      PrintRules
+      SetConf
       Paths_wolfram
   autogen-modules:
       Paths_wolfram
