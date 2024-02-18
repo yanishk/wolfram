@@ -22,7 +22,8 @@ data Conf = Conf
    start :: Maybe Int,
    dispLines :: Maybe Int,
    window :: Maybe Int,
-   move :: Maybe Int } deriving (Show, Eq)
+   move :: Maybe Int,
+   generation :: String } deriving (Show, Eq)
 
 defaultConf :: Conf
 defaultConf = Conf
@@ -30,7 +31,14 @@ defaultConf = Conf
     start = (Just 0),
     dispLines = Nothing,
     window = (Just 80),
-    move = (Just 0)}
+    move = (Just 0),
+    generation = "*" }
+
+isSpaceOrStar :: String -> Bool
+isSpaceOrStar [] = True
+isSpaceOrStar (x:xs)
+    | x /= '*' && x /= ' ' = False
+    | otherwise = isSpaceOrStar (xs)
 
 getOpts :: Conf -> [String] -> Maybe Conf
 getOpts dConf ("--rule":nb:r) = getOpts dConf {rule = readMaybe nb} r
@@ -38,7 +46,9 @@ getOpts dConf ("--start":nb:r) = getOpts dConf {start = readMaybe nb} r
 getOpts dConf ("--lines":nb:r) = getOpts dConf {dispLines = readMaybe nb} r
 getOpts dConf ("--window":nb:r) = getOpts dConf {window = readMaybe nb} r
 getOpts dConf ("--move":nb:r) = getOpts dConf {move = readMaybe nb} r
+getOpts dConf ("--generation":firstL:r) = getOpts dConf {generation = firstL} r
 getOpts dConf _
+    | isSpaceOrStar ((generation dConf)) == False = Nothing
     | (rule dConf) == Nothing || (rule dConf) < (Just 0)
     || (rule dConf) > (Just 256) = Nothing
     | (start dConf) == Nothing || (start dConf) < (Just 0) = Nothing
@@ -55,7 +65,7 @@ checkConf (Just _) = return (Just 0)
 callRule :: Conf -> IO (Maybe Int)
 callRule wolframConf
     | rule wolframConf == Nothing = return (Just 0)
-    | otherwise = (printRule "*" (ruleInBin
+    | otherwise = (printRule (generation wolframConf) (ruleInBin
     (fromJust (rule wolframConf)) (128)) (dispLines wolframConf)
     (window wolframConf) (move wolframConf) (start wolframConf))
 
