@@ -32,10 +32,10 @@ printRule str binaryRule (Just linesNb) (Just wdw) (Just mv) (Just 0) =
     printLine (wdw) (mv) (str) >>
     printRule (getNextRuleLine ("  " ++ str ++ "  ") binaryRule)
     binaryRule (Just (linesNb - 1)) (Just (wdw)) (Just (mv)) (Just 0)
-printRule str binaryRule Nothing (Just wdw) (Just mv) (Just 0) =
+printRule str binaryRule Nothing (Just wdw) (Just mv) (Just st) =
     printLine (wdw) (mv) (str) >> printRule (getNextRuleLine
     ("  " ++ str ++ "  ") binaryRule) binaryRule Nothing (Just (wdw))
-    (Just (mv)) (Just 0)
+    (Just (mv)) (Just (st - 1))
 printRule str binaryRule (Just linesNb) (Just wdw) (Just mv) (Just st) =
     printRule (getNextRuleLine ("  " ++ str ++ "  ") binaryRule)
     binaryRule (Just linesNb) (Just (wdw)) (Just mv) (Just (st - 1))
