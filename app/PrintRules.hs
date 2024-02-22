@@ -18,22 +18,28 @@ printWidth width
     | otherwise = return (Just 0)
 
 printLine :: Int -> Int -> String -> IO ()
-printLine wdw mv str = printWidth (div (wdw + mv) 2) >> putStr (str) >>
-    printWidth (div (wdw + mv) 2) >> putStrLn("")
+printLine wdw mv str
+    | wdw `mod` 2 == 0 = printWidth ((div (wdw - length str) 2) + 1) >> putStr (str) >>
+    printWidth (div (wdw - length str) 2) >> putStrLn("")
+    | otherwise = printWidth (div (wdw - length str) 2) >> putStr (str) >>
+    printWidth (div (wdw - length str) 2) >> putStrLn("")
 
 printRule :: String -> String -> Maybe Int -> Maybe Int -> Maybe Int -> Maybe Int -> IO (Maybe Int)
 printRule _ _ (Just 0) (Just _) (Just _) (Just _) = return (Just 0)
+
 printRule str binaryRule (Just linesNb) (Just wdw) (Just mv) (Just 0) =
     printLine (wdw) (mv) (str) >>
     printRule (getNextRuleLine ("  " ++ str ++ "  ") binaryRule)
-    binaryRule (Just (linesNb - 1)) (Just (wdw - 1)) (Just (mv - 1)) (Just 0)
+    binaryRule (Just (linesNb - 1)) (Just (wdw)) (Just (mv - 1)) (Just 0)
+
 printRule str binaryRule Nothing (Just wdw) (Just mv) (Just 0) =
     printLine (wdw) (mv) (str) >> printRule (getNextRuleLine
-    ("  " ++ str ++ "  ") binaryRule) binaryRule Nothing (Just (wdw - 1))
-    (Just (mv - 1)) (Just 0)
+    ("  " ++ str ++ "  ") binaryRule) binaryRule Nothing (Just (wdw))
+    (Just (mv)) (Just 0)
+
 printRule str binaryRule (Just linesNb) (Just wdw) (Just mv) (Just st) =
     printRule (getNextRuleLine ("  " ++ str ++ "  ") binaryRule)
-    binaryRule (Just linesNb) (Just wdw) (Just mv) (Just (st - 1))
+    binaryRule (Just linesNb) (Just (wdw)) (Just mv) (Just (st - 1))
 
 getNextRuleLine :: String -> String -> String
 getNextRuleLine [] _ = []
