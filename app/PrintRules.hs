@@ -19,9 +19,11 @@ printWidth width
 
 printLine :: Int -> Int -> String -> IO ()
 printLine wdw mv str
-    | wdw `mod` 2 == 0 = printWidth ((div (wdw - length str) 2) + 1) >> putStr (str) >>
+    | wdw `mod` 2 == 0 = printWidth ((div (wdw - length str) 2) + 1) >>
+    putStr (take wdw (drop ((div ((length str) - wdw) 2)) str)) >>
     printWidth (div (wdw - length str) 2) >> putStrLn("")
-    | otherwise = printWidth (div (wdw - length str) 2) >> putStr (str) >>
+    | otherwise = printWidth (div (wdw - length str) 2) >>
+    putStr (take wdw (drop ((div ((length str) - wdw) 2)) str)) >>
     printWidth (div (wdw - length str) 2) >> putStrLn("")
 
 printRule :: String -> String -> Maybe Int -> Maybe Int -> Maybe Int -> Maybe Int -> IO (Maybe Int)
