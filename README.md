@@ -9,7 +9,7 @@
 ![Make](https://img.shields.io/badge/build-Make-A42E2B?logo=gnu&logoColor=white)
 ![Linux](https://img.shields.io/badge/platform-Linux-lightgrey)
 
-<img src="docs/demo.gif" alt="scripts/all_rules.sh running every rule from 0 to 255, eight per screen" width="660">
+<img src="docs/demo.gif" alt="scripts/all_rules.sh showing rules 30, 90, 110, 150, 126, 105, 45 and 182, one per screen" width="660">
 
 [Quick start](#quick-start) · [Options](#options) · [How it works](#how-it-works)
 
@@ -49,7 +49,7 @@ make            # stack build, then copies the binary to ./wolfram
 
 `make clean`, `make fclean` and `make re` work as usual.
 
-`scripts/all_rules.sh [delay]` runs every rule from 0 to 255, as many per screen as the terminal can hold (it is the demo above).
+`scripts/all_rules.sh` runs every rule from 0 to 255, as many per screen as the terminal can hold. Give it rule numbers to show only those, one per screen: `scripts/all_rules.sh 30 90 110` (that is the demo above). `DELAY=1 scripts/all_rules.sh …` changes the pause between screens.
 
 ## Options
 

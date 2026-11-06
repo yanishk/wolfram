@@ -1,28 +1,37 @@
 #!/usr/bin/env bash
-#
-# Run every elementary rule, from 0 to 255, as many per screen as the
-# terminal can hold (a grid of small windows).
-#
-# usage: scripts/all_rules.sh [delay_in_seconds]
 
 cd "$(dirname "$0")/.." || exit 1
 [ -x ./wolfram ] || make -s || exit 1
 
-delay=${1:-0.75}
-cell=21                         # width of one rule, gap included
-lines=10                        # generations shown per rule
-cols=$(( $(tput cols) / cell ))
-rows=$(( ($(tput lines) - 1) / (lines + 2) ))
-(( cols < 1 )) && cols=1
-(( rows < 1 )) && rows=1
 esc=$(printf '\033')
 tmp=$(mktemp -d)
-
 tput civis
 trap 'tput cnorm; rm -rf "$tmp"' EXIT
 clear
 
-# One rule as a block of lines exactly $cell characters wide.
+draw() {
+    local screen
+    screen=$(printf '%s' "$1" | sed -E "s/rule +[0-9]+/${esc}[1m&${esc}[0m/g; s/\$/${esc}[K/")
+    printf '\033[H%s\n\033[J' "$screen"
+}
+
+if (( $# > 0 )); then
+    for rule in "$@"; do
+        lines=$(( $(tput lines) - 3 ))
+        width=$(( $(tput cols) - 1 ))
+        draw "$(printf 'rule %d\n\n' "$rule"; ./wolfram --rule "$rule" --lines "$lines" --window "$width")"
+        sleep "${DELAY:-2}"
+    done
+    exit 0
+fi
+
+cell=21
+lines=10
+cols=$(( $(tput cols) / cell ))
+rows=$(( ($(tput lines) - 1) / (lines + 2) ))
+(( cols < 1 )) && cols=1
+(( rows < 1 )) && rows=1
+
 block() {
     printf '%-*s\n' "$cell" "rule $1"
     ./wolfram --rule "$1" --lines "$lines" --window $((cell - 1)) |
@@ -42,8 +51,6 @@ while (( rule <= 255 )); do
         done
         screen+=$(paste -d '' "${files[@]}")$'\n'
     done
-    # Bold headers, then draw over the previous screen instead of clearing it.
-    screen=$(printf '%s' "$screen" | sed -E "s/rule +[0-9]+/${esc}[1m&${esc}[0m/g; s/\$/${esc}[K/")
-    printf '\033[H%s\n\033[J' "$screen"
-    sleep "$delay"
+    draw "$screen"
+    sleep "${DELAY:-0.75}"
 done
